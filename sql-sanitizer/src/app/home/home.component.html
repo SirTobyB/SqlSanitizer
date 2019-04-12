@@ -1,0 +1,9 @@
+
+<div class="input-container">
+  <textarea class="row1" cols="100" rows="20" [(ngModel)]="sqlQuery"></textarea>
+  <div class="row2">
+    <input [(ngModel)]="charsToRemove"/>
+    <button (click)="format()">Sanitize</button>
+  </div>
+  <textarea class="row3" cols="100" rows="20" readonly [(ngModel)]="formattedSql"></textarea>
+</div>
