@@ -1,0 +1,8 @@
+.git
+
+SqlSanitizer.Api/bin
+SqlSanitizer.Api/.idea
+SqlSanitizer.Api/obj
+
+sql-sanitizer/dist
+sql-sanitizer/node_modules
