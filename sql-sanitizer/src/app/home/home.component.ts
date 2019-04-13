@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 export class HomeComponent implements OnInit {
 
   sqlQuery: string;
-  charsToRemove: string;
+  charsToRemove = '", +';
   formattedSql: string;
 
   constructor(private http: HttpClient) { }
