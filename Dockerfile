@@ -13,7 +13,7 @@ ENV PATH /app/src/app/node_modules/.bin:$PATH
 
 RUN npm install
 RUN npm install -g @angular/cli --unsafe
-RUN npm run build --prod
+RUN npm ng build --prod
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
 WORKDIR /app
