@@ -19,5 +19,6 @@ namespace SqlSanitizer.Api.Models
         public Casing IdentifierCase { get; set; }
         public Casing KeywordCase { get; set; }
         public bool StripComments { get; set; }
+        public  SqlParameter[] Parameter { get; set; }
     }
 }

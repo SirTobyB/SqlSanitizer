@@ -1,13 +1,10 @@
 
 <div class="input-container">
-  <textarea class="row1" cols="100" rows="20" [(ngModel)]="sqlQuery"></textarea>
-  <div class="row2">
-    <!--<input [(ngModel)]="charsToRemove"/>
-    <label><input type="checkbox"> Reindent</label>
-    <button (click)="format()">Sanitize</button>-->
+  <textarea class="row1 full-row" cols="100" rows="20" [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>
+  <div class="row2 col1">
     <ul>
       <li>
-        <label>Chars to remove <input [(ngModel)]="charsToRemove"/></label>
+        <label>Chars to remove (comma seperated) <input [(ngModel)]="charsToRemove"/></label>
       </li>
       <li>
         <label>Reindent<input [(ngModel)]="reindent" type="checkbox"></label>
@@ -37,5 +34,11 @@
       <button (click)="format()">Sanitize</button>
     </ul>
   </div>
-  <textarea *ngIf="formattedSql !== ''" class="row3" cols="100" rows="20" readonly [(ngModel)]="formattedSql"></textarea>
+  <div class="row2 col2">
+    <ul>
+      <li *ngFor="let param of parameter">
+          <app-sql-parameter [parameter]="param"></app-sql-parameter>
+      </li>
+    </ul>
+  </div>
 </div>
