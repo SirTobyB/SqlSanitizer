@@ -11,19 +11,39 @@ import { environment } from '../../environments/environment';
 export class HomeComponent implements OnInit {
 
   sqlQuery: string;
-  charsToRemove = '", +';
-  formattedSql: string;
+  charsToRemove = '';
+  reindent = true;
+  indentWidth = 2;
+  identifierCase = 'Default';
+  keywordCase = 'Default';
+  stripComments = false;
+
+  casingOptions = ['Default', 'Upper', 'Lower', 'Capitalize'];
+  formattedSql = '';
 
   constructor(private http: HttpClient) { }
 
   format() {
 
+  let charsToRemoveSplits = new Array();
+
+  if (this.charsToRemove !== ''){
+    charsToRemoveSplits = this.charsToRemove.replace(' ', '').split(',');
+  }
+
   const body = {
     sqlQuery: this.sqlQuery,
-    charsToRemove: this.charsToRemove.replace(' ', '').split(',')
+    charsToRemove: charsToRemoveSplits,
+    reindent: this.reindent,
+    indentWidth: this.indentWidth,
+    identifierCase: this.identifierCase,
+    keywordCase: this.keywordCase,
+    stripComments: this.stripComments
   };
 
-    this.http.post<FormatResponse>(environment.apiUrl, body)
+  console.log(body);
+
+  this.http.post<FormatResponse>(environment.apiUrl, body)
       .subscribe(response => this.formattedSql = response.sql);
   }
 

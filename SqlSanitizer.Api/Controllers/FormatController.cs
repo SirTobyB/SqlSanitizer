@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,25 +17,38 @@ namespace SqlSanitizer.Api.Controllers
         {
             _clientFactory = clientFactory;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Format([FromBody] FormatRequest request)
         {
             var formattedSqlQuery = request.SqlQuery;
-            
+
             foreach (var charToRemove in request.CharsToRemove)
             {
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }
 
-            var httpClient = _clientFactory.CreateClient();
-            var payload = new FormUrlEncodedContent(new[]
+            var payloadData = new Dictionary<string, string>
             {
-                new KeyValuePair<string, string>("reindent", "1"),
-                new KeyValuePair<string, string>("sql", formattedSqlQuery), 
-            });
+                { "reindent", Convert.ToInt32(request.Reindent).ToString() },
+                { "indent_width", request.IndentWidth.ToString() },
+                { "sql", formattedSqlQuery },
+                { "strip_comments", Convert.ToInt32(request.StripComments).ToString()}
+            };
 
+            if (request.IdentifierCase != Casing.Default)
+            {
+                payloadData.Add("identifier_case", request.IdentifierCase.ToString().ToLower());
+            }
             
+            if (request.KeywordCase != Casing.Default)
+            {
+                payloadData.Add("keyword_case", request.KeywordCase.ToString().ToLower());
+            }
+
+            var httpClient = _clientFactory.CreateClient();
+            var payload = new FormUrlEncodedContent(payloadData);
+
             var response =
                 await httpClient.PostAsync("https://sqlformat.org/api/v1/format", payload);
 
@@ -43,7 +57,7 @@ namespace SqlSanitizer.Api.Controllers
 
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<FormatResponse>(content).Result;
-            
+
             return Ok(new {sql = result});
         }
     }
