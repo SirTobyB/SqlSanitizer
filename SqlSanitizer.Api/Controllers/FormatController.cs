@@ -28,6 +28,11 @@ namespace SqlSanitizer.Api.Controllers
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }
 
+            foreach (var parameter in request.Parameter)
+            {
+                formattedSqlQuery = formattedSqlQuery.Replace(parameter.Name, parameter.Value);
+            }
+            
             var payloadData = new Dictionary<string, string>
             {
                 { "reindent", Convert.ToInt32(request.Reindent).ToString() },
