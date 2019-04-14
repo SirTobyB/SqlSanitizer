@@ -12,6 +12,7 @@ import { SqlParameter } from '../models/SqlParameter';
 export class HomeComponent implements OnInit {
 
   parameterRegex = /\@([^=<>\s\']+)/g;
+  editorOptions = {theme: 'vs-dark', language: 'sql', automaticLayout: true }; // automaticLayout: true
 
   sqlQuery: string;
   charsToRemove = '';
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit {
   keywordCase = 'Default';
   stripComments = false;
 
-  parameter: SqlParameter[] = new Array();
+  parameter: SqlParameter[];
 
   casingOptions = ['Default', 'Upper', 'Lower', 'Capitalize'];
 
@@ -51,6 +52,9 @@ export class HomeComponent implements OnInit {
 
   inputChanged() {
     let m: RegExpExecArray;
+    this.parameter = new Array();
+
+    console.log('changed');
 
     do {
       m = this.parameterRegex.exec(this.sqlQuery);

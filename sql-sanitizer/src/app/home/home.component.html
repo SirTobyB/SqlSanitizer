@@ -1,6 +1,7 @@
 
 <div class="input-container">
-  <textarea class="row1 full-row" cols="100" rows="20" [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>
+  <ngx-monaco-editor [options]="editorOptions" class="row1 full-row" [(ngModel)]="sqlQuery" (change)="inputChanged()"></ngx-monaco-editor>
+  <!--<textarea class="row1 full-row" cols="100" rows="20" [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>-->
   <div class="row2 col1">
     <ul>
       <li>

@@ -1,5 +1,6 @@
 .input-container {
   display: grid;
+  height: 80vh;
 }
 
 .row1 {
@@ -25,4 +26,8 @@
 
 ul {
   list-style-type: none;
+}
+
+ngx-monaco-editor {
+  height: 100%;
 }

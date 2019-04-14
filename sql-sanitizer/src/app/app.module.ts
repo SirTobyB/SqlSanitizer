@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SqlParameterComponent } from './sql-parameter/sql-parameter.component';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SqlParameterComponent } from './sql-parameter/sql-parameter.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MonacoEditorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
