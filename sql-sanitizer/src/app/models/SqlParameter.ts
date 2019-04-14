@@ -1,9 +1,9 @@
 export class SqlParameter {
-    description: string;
+    name: string;
     value: string;
 
     constructor(description: string) {
-        this.description = description;
+        this.name = description;
         this.value = '';
     }
 }

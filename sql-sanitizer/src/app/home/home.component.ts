@@ -60,7 +60,6 @@ export class HomeComponent implements OnInit {
       }
     }
     while (m);
-    console.log(this.parameter);
   }
 
   ngOnInit() {}
