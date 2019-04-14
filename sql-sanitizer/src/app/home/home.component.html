@@ -2,8 +2,40 @@
 <div class="input-container">
   <textarea class="row1" cols="100" rows="20" [(ngModel)]="sqlQuery"></textarea>
   <div class="row2">
-    <input [(ngModel)]="charsToRemove"/>
-    <button (click)="format()">Sanitize</button>
+    <!--<input [(ngModel)]="charsToRemove"/>
+    <label><input type="checkbox"> Reindent</label>
+    <button (click)="format()">Sanitize</button>-->
+    <ul>
+      <li>
+        <label>Chars to remove <input [(ngModel)]="charsToRemove"/></label>
+      </li>
+      <li>
+        <label>Reindent<input [(ngModel)]="reindent" type="checkbox"></label>
+      </li>
+      <li *ngIf="reindent">
+        <label>Indent Width <input [(ngModel)]="indentWidth" type="number"/></label>
+      </li>
+      <li>
+        <label>Identifier case
+          <select [(ngModel)]="identifierCase">
+            <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
+          </select>
+        </label> 
+      </li>
+      <li>
+        <label>Keyword case
+          <select [(ngModel)]="keywordCase">
+            <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
+          </select>
+        </label> 
+      </li>
+      <li>
+        <label>Strip Comments <input type="checkbox" [(ngModel)]="stripComments"></label>
+      </li>
+    </ul>
+    <ul>
+      <button (click)="format()">Sanitize</button>
+    </ul>
   </div>
-  <textarea class="row3" cols="100" rows="20" readonly [(ngModel)]="formattedSql"></textarea>
+  <textarea *ngIf="formattedSql !== ''" class="row3" cols="100" rows="20" readonly [(ngModel)]="formattedSql"></textarea>
 </div>

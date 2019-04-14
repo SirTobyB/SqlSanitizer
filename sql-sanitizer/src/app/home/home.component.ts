@@ -12,13 +12,20 @@ export class HomeComponent implements OnInit {
 
   sqlQuery: string;
   charsToRemove = '';
-  formattedSql: string;
+  reindent = true;
+  indentWidth = 2;
+  identifierCase = 'Default';
+  keywordCase = 'Default';
+  stripComments = false;
+
+  casingOptions = ['Default', 'Upper', 'Lower', 'Capitalize'];
+  formattedSql = '';
 
   constructor(private http: HttpClient) { }
 
   format() {
 
-  var charsToRemoveSplits = new Array();
+  let charsToRemoveSplits = new Array();
 
   if (this.charsToRemove !== ''){
     charsToRemoveSplits = this.charsToRemove.replace(' ', '').split(',');
@@ -26,10 +33,17 @@ export class HomeComponent implements OnInit {
 
   const body = {
     sqlQuery: this.sqlQuery,
-    charsToRemove: charsToRemoveSplits
+    charsToRemove: charsToRemoveSplits,
+    reindent: this.reindent,
+    indentWidth: this.indentWidth,
+    identifierCase: this.identifierCase,
+    keywordCase: this.keywordCase,
+    stripComments: this.stripComments
   };
 
-    this.http.post<FormatResponse>(environment.apiUrl, body)
+  console.log(body);
+
+  this.http.post<FormatResponse>(environment.apiUrl, body)
       .subscribe(response => this.formattedSql = response.sql);
   }
 
