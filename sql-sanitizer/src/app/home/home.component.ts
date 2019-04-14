@@ -19,7 +19,6 @@ export class HomeComponent implements OnInit {
   stripComments = false;
 
   casingOptions = ['Default', 'Upper', 'Lower', 'Capitalize'];
-  formattedSql = '';
 
   constructor(private http: HttpClient) { }
 
@@ -42,7 +41,7 @@ export class HomeComponent implements OnInit {
   };
 
   this.http.post<FormatResponse>(environment.apiUrl, body)
-      .subscribe(response => this.formattedSql = response.sql);
+      .subscribe(response => this.sqlQuery = response.sql);
   }
 
   ngOnInit() {}
