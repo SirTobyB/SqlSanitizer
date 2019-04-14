@@ -11,16 +11,22 @@ import { environment } from '../../environments/environment';
 export class HomeComponent implements OnInit {
 
   sqlQuery: string;
-  charsToRemove = '", +';
+  charsToRemove = '';
   formattedSql: string;
 
   constructor(private http: HttpClient) { }
 
   format() {
 
+  var charsToRemoveSplits = new Array();
+
+  if (this.charsToRemove !== ''){
+    charsToRemoveSplits = this.charsToRemove.replace(' ', '').split(',');
+  }
+
   const body = {
     sqlQuery: this.sqlQuery,
-    charsToRemove: this.charsToRemove.replace(' ', '').split(',')
+    charsToRemove: charsToRemoveSplits
   };
 
     this.http.post<FormatResponse>(environment.apiUrl, body)
