@@ -38,12 +38,12 @@ namespace SqlSanitizer.Api.Controllers
 
             if (request.IdentifierCase != Casing.Default)
             {
-                payloadData.Add("identifier_case", request.IdentifierCase.ToString());
+                payloadData.Add("identifier_case", request.IdentifierCase.ToString().ToLower());
             }
             
             if (request.KeywordCase != Casing.Default)
             {
-                payloadData.Add("keyword_case", request.IdentifierCase.ToString());
+                payloadData.Add("keyword_case", request.KeywordCase.ToString().ToLower());
             }
 
             var httpClient = _clientFactory.CreateClient();
