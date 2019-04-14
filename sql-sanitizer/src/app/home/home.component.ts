@@ -41,8 +41,6 @@ export class HomeComponent implements OnInit {
     stripComments: this.stripComments
   };
 
-  console.log(body);
-
   this.http.post<FormatResponse>(environment.apiUrl, body)
       .subscribe(response => this.formattedSql = response.sql);
   }
