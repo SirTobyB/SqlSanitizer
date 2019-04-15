@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   keywordCase = 'Default';
   stripComments = false;
 
-  parameter: SqlParameter[] = new Array();
+  parameter: SqlParameter[];
 
   casingOptions = ['Default', 'Upper', 'Lower', 'Capitalize'];
 
@@ -51,7 +51,8 @@ export class HomeComponent implements OnInit {
 
   inputChanged() {
     let m: RegExpExecArray;
-
+    parameter =  = new Array();
+    
     do {
       m = this.parameterRegex.exec(this.sqlQuery);
 
