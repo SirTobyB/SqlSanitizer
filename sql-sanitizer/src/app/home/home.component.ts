@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   inputChanged() {
     let m: RegExpExecArray;
-    parameter = new Array();
+    this.parameter = new Array();
     
     do {
       m = this.parameterRegex.exec(this.sqlQuery);
