@@ -5,14 +5,13 @@ COPY SqlSanitizer.Api/ ./
 
 RUN dotnet publish -c Release -o /out SqlSanitizer.Api.csproj
 
-FROM node:10-alpine as ng-builder
+FROM jhell/ng-yarn as ng-builder
 WORKDIR /app
 
 COPY sql-sanitizer/ ./
 ENV PATH /app/src/app/node_modules/.bin:$PATH
 
-RUN npm install
-RUN npm install -g @angular/cli --unsafe
+RUN yarn install
 RUN ng build --prod
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
