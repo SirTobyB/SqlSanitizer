@@ -30,6 +30,11 @@ namespace SqlSanitizer.Api.Controllers
 
             foreach (var parameter in request.Parameter)
             {
+                if (string.IsNullOrWhiteSpace(parameter.Value))
+                {
+                    continue;
+                }
+                
                 formattedSqlQuery = formattedSqlQuery.Replace(parameter.Name, parameter.Value);
             }
             
