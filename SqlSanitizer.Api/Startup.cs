@@ -38,7 +38,7 @@ namespace SqlSanitizer.Api
             }
 
             app.UseCors(options =>
-                options.WithOrigins(new[] {"http://localhost:4200", "sql.juliushell.net"}).AllowAnyMethod().AllowAnyHeader());
+                options.WithOrigins(new[] {"http://localhost:4200", "sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();

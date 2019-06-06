@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://sql.juliushell.net/api/format'
+  apiUrl: 'https://sql.jhell.dev/api/format'
 };
