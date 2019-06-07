@@ -1,0 +1,23 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  dockerId: jhell
+  imageName: sql-sanitizer
+
+steps:
+- script: |
+    docker build -t $(dockerId)/$(imageName) .
+    docker login -u $(dockerId) -p $(dockerPwd)
+    docker push $(dockerId)/$(imageName)
+  env:
+    dockerPwd: $(dockerHubPassword)
+  displayName: 'Build and publish image'
