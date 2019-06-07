@@ -1,44 +1,24 @@
 :host {
   width: 100%;
+  height: 100%;
 }
 
 input {
   width: 100%;
 }
-/*
-input[type=number] {
-  text-align: right;
+
+.top-card {
+  margin-top: unset;
 }
 
-clr-textarea-container > .clr-control-container {
-  width: 100% !important;
+.sql-card {
+  height: 66%;
 }
 
-.input-container {
-  display: grid;
+.sql-block {
+  height: 90%;
 }
 
-.row1 {
-  grid-row: 1;
+textarea {
+  height: 100%;
 }
-
-.row2 {
-  grid-row: 2;
-}
-
-.col1 {
-  grid-column: 1;
-}
-
-.col2 {
-  grid-column: 2;
-}
-
-.full-row {
-  grid-column-start: 1;
-  grid-column-end: 3;
-}
-
-ul {
-  list-style-type: none;
-}*/

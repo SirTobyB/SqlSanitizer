@@ -1,86 +1,65 @@
-<div>
-  <div class="clr-row">
-    <div class="clr-col-9">
-      <textarea class="w-100" rows="20" [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>
+<div class="h-100">
+  <div class="clr-row h-100">
+    <div class="clr-col-8">
+      <div class="card top-card sql-card">
+        <div class="card-header">
+          SQL
+        </div>
+        <div class="card-block sql-block">
+            <textarea [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>
+        </div>
+      </div>
     </div>
-    <div class="clr-col-3">
-      <form clrForm>
-        <app-sql-parameter *ngFor="let param of parameter" [parameter]="param"></app-sql-parameter>
-      </form>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-6">
-      <form clrForm>
-        <clr-input-container>
-          <label class="clr-col-12 clr-col-sm-4">Chars to remove (comma seperated)</label>
-          <input class="clr-col-12 clr-col-sm-8" clrInput type="text" name="charsToRemove" [(ngModel)]="charsToRemove"/>
-        </clr-input-container>
-        <clr-input-container>
-          <label class="clr-col-12 clr-col-sm-4">Indent Width</label>
-          <input class="clr-col-12 clr-col-sm-8"clrInput type="number" name="indentWidth" [(ngModel)]="indentWidth"/>
-        </clr-input-container>
-        <clr-select-container>
-          <label class="clr-col-12 clr-col-sm-4">Identifier case</label>
-          <select class="clr-col-12 clr-col-sm-8" clrSelect name="identifierCase" [(ngModel)]="identifierCase">
-            <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
-          </select>
-        </clr-select-container>
-        <clr-select-container>
-            <label class="clr-col-12 clr-col-sm-4">Keyword case</label>
-            <select class="clr-col-12 clr-col-sm-8" clrSelect name="keywordCase" [(ngModel)]="keywordCase">
-              <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
-            </select>
-        </clr-select-container>
-        <clr-toggle-wrapper>
-          <label>Strip Comments</label>
-          <input type="checkbox" clrToggle name="stripComments" [(ngModel)]="stripComments"/>
-        </clr-toggle-wrapper>
-        <button class="btn btn-primary" (click)="format()">Sanitize</button>
-      </form>
+    <div class="clr-col-4">
+        <div class="card top-card">
+          <div class="card-header">
+            Configuration
+          </div>
+          <div class="card-block">
+            <form clrForm>
+                <clr-input-container>
+                  <label class="clr-col-12 clr-col-sm-4">Chars to remove (comma seperated)</label>
+                  <input class="clr-col-12 clr-col-sm-8" clrInput type="text" name="charsToRemove" [(ngModel)]="charsToRemove"/>
+                </clr-input-container>
+                <clr-input-container>
+                  <label class="clr-col-12 clr-col-sm-4">Indent Width</label>
+                  <input class="clr-col-12 clr-col-sm-8"clrInput type="number" name="indentWidth" [(ngModel)]="indentWidth"/>
+                </clr-input-container>
+                <clr-select-container>
+                  <label class="clr-col-12 clr-col-sm-4">Identifier case</label>
+                  <select class="clr-col-12 clr-col-sm-8" clrSelect name="identifierCase" [(ngModel)]="identifierCase">
+                    <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
+                  </select>
+                </clr-select-container>
+                <clr-select-container>
+                    <label class="clr-col-12 clr-col-sm-4">Keyword case</label>
+                    <select class="clr-col-12 clr-col-sm-8" clrSelect name="keywordCase" [(ngModel)]="keywordCase">
+                      <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
+                    </select>
+                </clr-select-container>
+                <clr-toggle-wrapper>
+                  <label>Strip Comments</label>
+                  <input type="checkbox" clrToggle name="stripComments" [(ngModel)]="stripComments"/>
+                </clr-toggle-wrapper>
+              </form>
+          </div>
+          <div class="card-footer">
+              <button class="btn btn-primary btn-block" (click)="format()">Sanitize</button>
+          </div>
+        </div>
+        <div *ngIf="parameter" class="card">
+          <div class="card-header">
+            Parameter
+          </div>
+          <div class="card-block">
+            <form clrForm>
+              <clr-input-container *ngFor="let param of parameter">
+                <label class="clr-col-12 clr-col-sm-4">{{  param.name }}</label>
+                <input class="clr-col-12 clr-col-sm-8" clrInput type="text" name="paramValue" [(ngModel)]="param.value"/>
+              </clr-input-container>
+            </form>
+          </div>
+        </div>
     </div>
   </div>
 </div>
-<!--<div class="input-container">
-  <textarea class="row1 full-row" cols="100" rows="20" [(ngModel)]="sqlQuery" (change)="inputChanged()"></textarea>
-  <div class="row2 col1">
-    <ul>
-      <li>
-        <label>Chars to remove (comma seperated) <input [(ngModel)]="charsToRemove"/></label>
-      </li>
-      <li>
-        <label>Reindent<input [(ngModel)]="reindent" type="checkbox"></label>
-      </li>
-      <li *ngIf="reindent">
-        <label>Indent Width <input [(ngModel)]="indentWidth" type="number"/></label>
-      </li>
-      <li>
-        <label>Identifier case
-          <select [(ngModel)]="identifierCase">
-            <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
-          </select>
-        </label> 
-      </li>
-      <li>
-        <label>Keyword case
-          <select [(ngModel)]="keywordCase">
-            <option *ngFor="let casingOption of casingOptions" value="{{casingOption}}">{{ casingOption }}</option>
-          </select>
-        </label> 
-      </li>
-      <li>
-        <label>Strip Comments <input type="checkbox" [(ngModel)]="stripComments"></label>
-      </li>
-    </ul>
-    <ul>
-      <button (click)="format()">Sanitize</button>
-    </ul>
-  </div>
-  <div class="row2 col2">
-    <ul>
-      <li *ngFor="let param of parameter">
-          <app-sql-parameter [parameter]="param"></app-sql-parameter>
-      </li>
-    </ul>
-  </div>
-</div>-->
