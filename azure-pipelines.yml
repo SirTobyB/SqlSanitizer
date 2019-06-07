@@ -10,14 +10,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  dockerId: jhell
-  imageName: sql-sanitizer
+  - group: Docker Credentials
+  - name: dockerId
+    value: jhell
+  - name: imageName
+    value: sql-sanitizer
 
 steps:
 - script: |
     docker build -t $(dockerId)/$(imageName) .
     docker login -u $(dockerId) -p $(dockerPwd)
     docker push $(dockerId)/$(imageName)
-  env:
-    dockerPwd: $(dockerHubPassword)
   displayName: 'Build and publish image'
