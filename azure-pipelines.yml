@@ -18,9 +18,11 @@ variables:
 
 steps:
 - script: |
-    docker build -t $(dockerId)/$(imageName) .
+    docker build -t $(dockerId)/$(imageName):latest .
+    docker tag $(dockerId)/$(imageName):latest $(dockerId)/$(imageName):$(Build.BuildId)
     docker login -u $(dockerId) -p $(dockerHubPassword)
-    docker push $(dockerId)/$(imageName)
+    docker push $(dockerId)/$(imageName):latest
+    docker push $(dockerId)/$(imageName):$(Build.BuildId)
   displayName: 'Build and publish image'
 
 - task: SSH@0
