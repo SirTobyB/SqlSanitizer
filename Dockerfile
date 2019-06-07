@@ -11,7 +11,7 @@ WORKDIR /app
 COPY sql-sanitizer/ ./
 ENV PATH /app/src/app/node_modules/.bin:$PATH
 
-RUN yarn install && ng build --prod
+RUN yarn && ng build --prod --source-map=false
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
 WORKDIR /app
