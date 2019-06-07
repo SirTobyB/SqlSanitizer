@@ -22,13 +22,14 @@ steps:
     docker login -u $(dockerId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName)
   displayName: 'Build and publish image'
+
 - task: SSH@0
   inputs:
     sshEndpoint: 'jhell.dev'
-    runOptions: 'commands'
-    commands: 'docker stop sql-sanitizer
+    runOptions: 'inline'
+    inline: 'docker stop sql-sanitizer
       docker rm sql-sanitizer
       docker pull jhell/sql-sanitizer:latest
       docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
   displayName: Pull and start new image
-
+    
