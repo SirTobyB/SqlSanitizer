@@ -22,5 +22,10 @@ steps:
     docker login -u $(dockerId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName)
   displayName: 'Build and publish image'
-  
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'jhell.dev'
+    runOptions: 'script'
+    scriptPath: '/root/update-sanitizer.sh'
+  displayName: Pull and start new image
 
