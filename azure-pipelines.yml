@@ -39,7 +39,7 @@ steps:
     $(notifyUrl)/api/notification/send \
     -H \'Content-Type: application/json\' \
     -H \'token: $(notifyToken)\' \
-    -d \'{
-    "ProjectName": "$(System.TeamProject)",
-    "Message": "Build finished successful"
-    }\''
+    -d \'{ \
+    "ProjectName": "$(System.TeamProject)", \
+    "Message": "Build finished successful" \
+    }\'
