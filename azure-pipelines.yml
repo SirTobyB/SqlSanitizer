@@ -35,7 +35,7 @@ steps:
 #  displayName: Pull and start new image
 
 - script: |
-    'curl -X POST $(notifyUrl)/api/notification/send \
+    curl -X POST $(notifyUrl)/api/notification/send \
     -H 'Content-Type: application/json' \
     -H 'token: $(notifyToken)' \
     -d '{ "ProjectName": "$(System.TeamProject)", "Message": "Build finished successful" }'
