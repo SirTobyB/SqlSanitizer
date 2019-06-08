@@ -34,3 +34,18 @@ steps:
       docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
   displayName: Pull and start new image
     
+- task: InvokeRESTAPI@1
+  inputs:
+    connectionType: 'connectedServiceName'
+    serviceConnection: 'notify.jhell.dev'
+    method: 'POST'
+    headers: '{
+      "Content-Type":"application/json", 
+      "token","$(notifyToken)"
+      }'
+    body: '{
+      "ProjectName": "$(System.TeamProject)",
+      "Message": "Build finished successful"
+      }'
+    waitForCompletion: 'false'
+  displayName: 'Send notification'
