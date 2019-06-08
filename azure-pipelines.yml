@@ -15,37 +15,31 @@ variables:
     value: jhell
   - name: imageName
     value: sql-sanitizer
-
+  - group: NotifyConfig
 steps:
-- script: |
-    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(Build.BuildId) .
-    docker login -u $(dockerId) -p $(dockerHubPassword)
-    docker push $(dockerId)/$(imageName):latest
-    docker push $(dockerId)/$(imageName):$(Build.BuildId)
-  displayName: 'Build and publish image'
+#- script: |
+#    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(Build.BuildId) .
+#    docker login -u $(dockerId) -p $(dockerHubPassword)
+#    docker push $(dockerId)/$(imageName):latest
+#    docker push $(dockerId)/$(imageName):$(Build.BuildId)
+#  displayName: 'Build and publish image'
+#
+#- task: SSH@0
+#  inputs:
+#    sshEndpoint: 'jhell.dev'
+#    runOptions: 'inline'
+#    inline: 'docker stop sql-sanitizer &&
+#      docker rm sql-sanitizer &&
+#      docker pull jhell/sql-sanitizer:latest &&
+#      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
+#  displayName: Pull and start new image
 
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'jhell.dev'
-    runOptions: 'inline'
-    inline: 'docker stop sql-sanitizer &&
-      docker rm sql-sanitizer &&
-      docker pull jhell/sql-sanitizer:latest &&
-      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
-  displayName: Pull and start new image
-    
-- task: InvokeRESTAPI@1
-  inputs:
-    connectionType: 'connectedServiceName'
-    serviceConnection: 'notify.jhell.dev'
-    method: 'POST'
-    headers: '{
-      "Content-Type":"application/json", 
-      "token","$(notifyToken)"
-      }'
-    body: '{
-      "ProjectName": "$(System.TeamProject)",
-      "Message": "Build finished successful"
-      }'
-    waitForCompletion: 'false'
-  displayName: 'Send notification'
+- script: |
+    'curl -X POST \
+    $(notifyUrl)/api/notification/send \
+    -H \'Content-Type: application/json\' \
+    -H \'token: $(notifyToken)\' \
+    -d \'{
+    "ProjectName": "$(System.TeamProject)",
+    "Message": "Build finished successful"
+    }\''
