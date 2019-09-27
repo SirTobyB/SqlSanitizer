@@ -26,7 +26,7 @@ namespace SqlSanitizer.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +41,8 @@ namespace SqlSanitizer.Api
                 options.WithOrigins(new[] {"http://localhost:4200", "sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

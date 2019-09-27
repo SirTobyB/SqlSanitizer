@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine AS dotnet-builder
 WORKDIR /app
 
 COPY SqlSanitizer.Api/ ./
@@ -13,7 +13,7 @@ ENV PATH /app/src/app/node_modules/.bin:$PATH
 
 RUN yarn && ng build --prod --source-map=false
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine
 WORKDIR /app
 
 COPY --from=dotnet-builder /out .
