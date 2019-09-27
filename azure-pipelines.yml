@@ -33,10 +33,3 @@ steps:
       docker pull jhell/sql-sanitizer:latest &&
       docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
   displayName: Pull and start new image
-
-- script: |
-    curl -X POST $(notifyUrl)/api/notification/send \
-    -H 'Content-Type: application/json' \
-    -H 'token: $(notifyToken)' \
-    -d '{ "ProjectName": "$(System.TeamProject)", "Message": "Build finished successful" }'
-  displayName: "Send notification"
