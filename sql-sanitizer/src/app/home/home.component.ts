@@ -11,7 +11,7 @@ import { SqlParameter } from '../models/SqlParameter';
 })
 export class HomeComponent implements OnInit {
 
-  parameterRegex = /\@([^=<>\s\']+)/g;
+  parameterRegex = /\@[A-Za-z0-9]*/g;
 
   sqlQuery: string;
   charsToRemove = '';
