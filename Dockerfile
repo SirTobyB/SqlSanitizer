@@ -3,6 +3,7 @@ WORKDIR /app
 
 COPY SqlSanitizer.Api/ ./
 
+RUN dotnet restore --source https://www.myget.org/F/appmetrics/api/v3/index.json --source https://api.nuget.org/v3/index.json
 RUN dotnet publish -c Release -o /out SqlSanitizer.Api.csproj
 
 FROM jhell/ng-yarn as ng-builder

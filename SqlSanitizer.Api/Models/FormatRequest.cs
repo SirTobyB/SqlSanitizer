@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace SqlSanitizer.Api.Models
 {
     public enum Casing
