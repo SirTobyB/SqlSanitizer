@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace SqlSanitizer.Api
 {
@@ -41,24 +42,25 @@ namespace SqlSanitizer.Api
             services.AddMetricsTrackingMiddleware();
             services.AddMetricsReportingHostedService();
             services.AddHttpClient();
-            services.AddControllers().AddMetrics();
+            services.AddControllers().AddNewtonsoftJson().AddMetrics();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseCors(options =>
-                options.WithOrigins(new[] {"http://localhost:4200", "sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMetricsAllMiddleware();
 
             app.UseRouting();
+            app.UseCors(options =>
+                options.WithOrigins(new[] {"http://localhost:4200", "https://sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
+            
+            app.UseMetricsAllMiddleware();
+
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

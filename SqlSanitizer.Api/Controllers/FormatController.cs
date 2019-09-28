@@ -45,7 +45,7 @@ namespace SqlSanitizer.Api.Controllers
                 { "sql", formattedSqlQuery },
                 { "strip_comments", Convert.ToInt32(request.StripComments).ToString()}
             };
-
+            
             if (request.IdentifierCase != Casing.Default)
             {
                 payloadData.Add("identifier_case", request.IdentifierCase.ToString().ToLower());

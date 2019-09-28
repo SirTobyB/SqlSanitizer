@@ -13,6 +13,7 @@
         <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="3.2.0-dev0022" />
         <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="3.2.0-dev0022" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     </ItemGroup>
 
