@@ -15,7 +15,6 @@ variables:
     value: jhell
   - name: imageName
     value: sql-sanitizer
-  - group: NotifyConfig
 steps:
 - script: |
     docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(Build.BuildId) .
@@ -31,5 +30,5 @@ steps:
     inline: 'docker stop sql-sanitizer &&
       docker rm sql-sanitizer &&
       docker pull jhell/sql-sanitizer:latest &&
-      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -d jhell/sql-sanitizer:latest'
+      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -e VERSION=$(Build.BuildId) --env-file ~/services/sql-sanitizer/environment.env -d jhell/sql-sanitizer:latest'
   displayName: Pull and start new image
