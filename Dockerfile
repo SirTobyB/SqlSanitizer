@@ -9,12 +9,14 @@ RUN dotnet publish -c Release -o /out SqlSanitizer.Api.csproj
 FROM node:10-slim as ng-builder
 WORKDIR /app
 
-COPY sql-sanitizer/ ./
-ENV PATH /app/src/app/node_modules/.bin:$PATH
 
-RUN yarn global add @angular/cli
+COPY sql-sanitizer/package.json ./package.json
+COPY sql-sanitizer/yarn.lock ./yarn.lock
+
 RUN yarn
-RUN ng build --prod --source-map=false
+
+COPY sql-sanitizer/ ./
+RUN node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod --source-map=false
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine
 WORKDIR /app
