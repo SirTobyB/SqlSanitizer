@@ -23,14 +23,31 @@ steps:
       echo "##vso[task.setvariable variable=shortHash]$(git rev-parse --short $(Build.SourceVersion))"
   displayName: 'Get short hash'
 
-- task: CmdLine@2
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(shortHash) .
+#          docker login -u $(dockerId) -p $(dockerHubPassword)
+#          docker push $(dockerId)/$(imageName):latest
+#          docker push $(dockerId)/$(imageName):$(shortHash)
+#  displayName: 'Build and publish image'
+
+- task: Docker@2
   inputs:
-    script: |
-      docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(shortHash) .
-          docker login -u $(dockerId) -p $(dockerHubPassword)
-          docker push $(dockerId)/$(imageName):latest
-          docker push $(dockerId)/$(imageName):$(shortHash)
-  displayName: 'Build and publish image'
+    containerRegistry: 'Docker Hub'
+    command: 'login'
+    addPipelineData: false
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'jhell/sql-sanitizer'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      $(shortHash)
+      latest
+    addPipelineData: false
 
 - task: SSH@0
   inputs:
