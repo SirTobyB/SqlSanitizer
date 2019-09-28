@@ -25,8 +25,11 @@ namespace SqlSanitizer.Api
             var influxDb = Environment.GetEnvironmentVariable("INFLUX_DB") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_DB\")");
             var influxUser = Environment.GetEnvironmentVariable("INFLUX_USER") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_USER\")");
             var influxPwd = Environment.GetEnvironmentVariable("INFLUX_PWD") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_PWD\")");
+
+            var serverName = Environment.GetEnvironmentVariable("SERVER_NAME") ?? Environment.MachineName;
             
             var metrics = AppMetrics.CreateDefaultBuilder()
+                .Configuration.Configure(options => { options.AddServerTag(serverName); })
                 .Report.ToInfluxDb(options =>
                 {
                     options.InfluxDb.BaseUri = new Uri(influxUrl);
