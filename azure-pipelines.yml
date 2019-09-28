@@ -17,22 +17,24 @@ variables:
     value: sql-sanitizer
 steps:
 - script: |
-    echo "##vso[task.setvariable variable=shortHash]$(git rev-parse --short $(Build.SourceVersion))"
-  displayName: 'Get commit hash'
+    echo "##vso[task.setvariable variable=shortHash;isOutput=true]$(git rev-parse --short $(Build.SourceVersion))"
+  displayName: 'setVersion'
 
 - script: |
-    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(shortHash) .
+    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(setVersion.shortHash) .
     docker login -u $(dockerId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName):latest
-    docker push $(dockerId)/$(imageName):$(shortHash)
+    docker push $(dockerId)/$(imageName):$(setVersion.shortHash)
   displayName: 'Build and publish image'
 
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'jhell.dev'
-    runOptions: 'inline'
-    inline: 'docker pull jhell/sql-sanitizer:$(shortHash) && 
-      docker stop sql-sanitizer &&
-      docker rm sql-sanitizer &&
-      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -e VERSION=$(shortHash) --env-file ~/services/sql-sanitizer/environment.env -d jhell/sql-sanitizer:$(shortHash)'
-  displayName: Pull and start new image
+
+
+#- task: SSH@0
+#  inputs:
+#    sshEndpoint: 'jhell.dev'
+#    runOptions: 'inline'
+#    inline: 'docker pull jhell/sql-sanitizer:$(shortHash) && 
+#      docker stop sql-sanitizer &&
+#      docker rm sql-sanitizer &&
+#      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -e VERSION=$(shortHash) --env-file ~/services/sql-sanitizer/environment.env -d jhell/sql-sanitizer:$(shortHash)'
+#  displayName: Pull and start new image
