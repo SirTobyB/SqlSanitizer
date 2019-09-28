@@ -19,7 +19,7 @@ variables:
 steps:
 - script: |
     echo "##vso[task.setvariable variable=shortHash]$(git rev-parse --short $(Build.SourceVersion))"
-    echo $(shortHash)
+    echo $SHORTHASH
   displayName: 'setVersion'
 
 - script: |
