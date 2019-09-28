@@ -15,17 +15,20 @@ variables:
     value: jhell
   - name: imageName
     value: sql-sanitizer
+
 steps:
 - script: |
-    echo "##vso[task.setvariable variable=shortHash;isOutput=true]$(git rev-parse --short $(Build.SourceVersion))"
+    echo "##vso[task.setvariable variable=shortHash]$(git rev-parse --short $(Build.SourceVersion))"
+    echo $(shortHash)
   displayName: 'setVersion'
 
 - script: |
-    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(setVersion.shortHash) .
+    docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(shortHash) .
     docker login -u $(dockerId) -p $(dockerHubPassword)
     docker push $(dockerId)/$(imageName):latest
-    docker push $(dockerId)/$(imageName):$(setVersion.shortHash)
+    docker push $(dockerId)/$(imageName):$(shortHash)
   displayName: 'Build and publish image'
+
 
 
 
