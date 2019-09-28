@@ -32,24 +32,12 @@ steps:
           docker push $(dockerId)/$(imageName):$(shortHash)
   displayName: 'Build and publish image'
 
-- task: CmdLine@2
+- task: SSH@0
   inputs:
-    script: 'echo $(shortHash) >> $(Build.ArtifactStagingDirectory)/version.txt'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'version'
-    publishLocation: 'Container'
-
-
-
-#- task: SSH@0
-#  inputs:
-#    sshEndpoint: 'jhell.dev'
-#    runOptions: 'inline'
-#    inline: 'docker pull jhell/sql-sanitizer:$(shortHash) && 
-#      docker stop sql-sanitizer &&
-#      docker rm sql-sanitizer &&
-#      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -e VERSION=$(shortHash) --env-file ~/services/sql-sanitizer/environment.env -d jhell/sql-sanitizer:$(shortHash)'
-#  displayName: Pull and start new image
+    sshEndpoint: 'jhell.dev'
+    runOptions: 'inline'
+    inline: 'docker pull jhell/sql-sanitizer:$(shortHash) && 
+      docker stop sql-sanitizer &&
+      docker rm sql-sanitizer &&
+      docker run --restart unless-stopped --name sql-sanitizer -p 127.0.0.1:5420:5000 -e VERSION=$(shortHash) --env-file ~/services/sql-sanitizer/environment.env -d jhell/sql-sanitizer:$(shortHash)'
+  displayName: Pull and start new image
