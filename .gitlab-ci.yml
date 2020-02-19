@@ -9,7 +9,18 @@ build:api:
   script:
     - cd SqlSanitizer.Api
     - dotnet restore
-    - dotnet publish -c Release -o ../out SqlSanitizer.Api.csproj
+    - dotnet publish -c Release -o ../api SqlSanitizer.Api.csproj
   artifacts:
     paths:
-      - ./out
+      - ./api
+
+build:angular:
+  stage: build
+  image: node:13
+  script:
+    - cd sql-sanitizer
+    - yarn
+    - node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod --source-map=false --output-path=../ui
+  artifacts:
+    paths:
+      - ./ui
