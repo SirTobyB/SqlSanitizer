@@ -1,12 +1,12 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS dotnet-builder
 WORKDIR /app
 
 COPY SqlSanitizer.Api/ ./
 
-RUN dotnet restore --source https://www.myget.org/F/appmetrics/api/v3/index.json --source https://api.nuget.org/v3/index.json
+RUN dotnet restore
 RUN dotnet publish -c Release -o /out SqlSanitizer.Api.csproj
 
-FROM node:10-slim as ng-builder
+FROM node:13 as ng-builder
 WORKDIR /app
 
 
@@ -18,7 +18,7 @@ RUN yarn
 COPY sql-sanitizer/ ./
 RUN node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod --source-map=false
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
 WORKDIR /app
 
 COPY --from=dotnet-builder /out .
