@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -28,16 +30,21 @@ namespace SqlSanitizer.Api.Controllers
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }
 
-            foreach (var parameter in request.Parameter)
+            while (true)
             {
-                if (string.IsNullOrWhiteSpace(parameter.Value))
-                {
+                var match = Regex.Match(formattedSqlQuery, @"\@\b[a-zA-Z0-9]*\b");
+
+                if (!match.Success)
+                    break;
+
+                var parameter = request.Parameter.FirstOrDefault(p => p.Name == match.Value);
+
+                if (parameter == null)
                     continue;
-                }
-                
-                formattedSqlQuery = formattedSqlQuery.Replace(parameter.Name, parameter.Value);
+
+                formattedSqlQuery = formattedSqlQuery.Remove(match.Index, match.Length).Insert(match.Index, parameter.Value);
             }
-            
+
             var payloadData = new Dictionary<string, string>
             {
                 { "reindent", Convert.ToInt32(request.Reindent).ToString() },

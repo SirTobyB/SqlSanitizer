@@ -1,8 +1,5 @@
-﻿using System;
-using App.Metrics;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,31 +18,8 @@ namespace SqlSanitizer.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var influxUrl = Environment.GetEnvironmentVariable("INFLUX_URL") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_URL\")");
-            var influxDb = Environment.GetEnvironmentVariable("INFLUX_DB") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_DB\")");
-            var influxUser = Environment.GetEnvironmentVariable("INFLUX_USER") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_USER\")");
-            var influxPwd = Environment.GetEnvironmentVariable("INFLUX_PWD") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"INFLUX_PWD\")");
-
-            var serverName = Environment.GetEnvironmentVariable("SERVER_NAME") ?? Environment.MachineName;
-            
-            var metrics = AppMetrics.CreateDefaultBuilder()
-                .Configuration.Configure(options => { options.AddServerTag(serverName); })
-                .Report.ToInfluxDb(options =>
-                {
-                    options.InfluxDb.BaseUri = new Uri(influxUrl);
-                    options.InfluxDb.Database = influxDb;
-                    options.InfluxDb.UserName = influxUser;
-                    options.InfluxDb.Password = influxPwd;
-                    options.FlushInterval = TimeSpan.FromSeconds(10);
-                })
-                .Build();
-            
-            
-            services.AddMetrics(metrics);
-            services.AddMetricsTrackingMiddleware();
-            services.AddMetricsReportingHostedService();
             services.AddHttpClient();
-            services.AddControllers().AddNewtonsoftJson().AddMetrics();
+            services.AddControllers().AddNewtonsoftJson();//.AddMetrics();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,8 +35,6 @@ namespace SqlSanitizer.Api
             app.UseRouting();
             app.UseCors(options =>
                 options.WithOrigins(new[] {"http://localhost:4200", "https://sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
-            
-            app.UseMetricsAllMiddleware();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
