@@ -12,4 +12,4 @@ build:api:
     - dotnet publish -c Release -o ./out SqlSanitizer.Api.csproj
   artifacts:
     paths:
-      - ./out
+      - SqlSanitizer.Api/out
