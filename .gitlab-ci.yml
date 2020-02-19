@@ -9,7 +9,7 @@ build:api:
   script:
     - cd SqlSanitizer.Api
     - dotnet restore
-    - dotnet publish -c Release -o ./out SqlSanitizer.Api.csproj
+    - dotnet publish -c Release -o ../out SqlSanitizer.Api.csproj
   artifacts:
     paths:
-      - SqlSanitizer.Api/out
+      - ./out
