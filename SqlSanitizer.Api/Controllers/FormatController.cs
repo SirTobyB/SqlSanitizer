@@ -28,6 +28,10 @@ namespace SqlSanitizer.Api.Controllers
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }
 
+            // Order the parameters by the character length of the parameter names (to get the parameters with the longest names first), 
+            // to avoid replacing the parameter value for '@column10' with the value for '@column1' (as an example).
+            Array.Sort(request.Parameter, (x, y) => y.Name.Length.CompareTo(x.Name.Length));
+
             foreach (var parameter in request.Parameter)
             {
                 if (string.IsNullOrWhiteSpace(parameter.Value))
