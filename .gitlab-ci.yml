@@ -1,5 +1,6 @@
 stages:
   - build
+  - pack
   - publish
   - deploy
 
@@ -17,6 +18,10 @@ build:api:
 build:angular:
   stage: build
   image: node:13
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - sql-sanitizer/node_modules/
   script:
     - cd sql-sanitizer
     - yarn
@@ -24,3 +29,15 @@ build:angular:
   artifacts:
     paths:
       - ./ui
+
+pack:final-image:
+  stage: pack
+  image: docker:dind
+  dependencies:
+    - build:angular
+    - build:api
+  script:
+    - docker build --rm -t jhell/sql-sanitizer:latest -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker login -u $docker_user -p $docker_pwd
+    - docker push jhell/sql-sanitizer:latest
+    - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
