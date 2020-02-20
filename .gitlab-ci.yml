@@ -37,7 +37,18 @@ pack:final-image:
     - build:angular
     - build:api
   script:
-    - docker build --rm -t jhell/sql-sanitizer:latest -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker build --rm jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
     - docker login -u $docker_user -p $docker_pwd
-    - docker push jhell/sql-sanitizer:latest
     - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
+
+publish:latest-image:
+  stage: publish
+  image: docker:dind
+  only:
+    refs:
+      - master
+  script:
+    - docker login -u $docker_user -p $docker_pwd
+    - docker pull jhell/sql-sanitizer:$CI_COMMIT_SHA
+    - docker jhell/sql-sanitizer:$CI_COMMIT_SHA jhell/sql-sanitizer:latest
+    - docker push jhell/sql-sanitizer:latest
