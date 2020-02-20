@@ -65,6 +65,6 @@ deploy:update-service:
     - echo "$ssh_key" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - 'echo "$ssh_known_host" > ~/.ssh/known_hosts'
+    - ssh-keyscan $host >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - ssh $ssh_user@$host 'cd /srv/sql && docker-compose up -d --no-deps --build sanitizer'
