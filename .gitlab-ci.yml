@@ -33,6 +33,10 @@ build:angular:
 pack:create-image:
   stage: pack
   image: docker:dind
+  only:
+    refs:
+      - master
+      - develop
   dependencies:
     - build:angular
     - build:api
