@@ -15,13 +15,15 @@ build:api:
     paths:
       - ./api
   only:
-    - merge_requests
-    - master
-    - develop
+    refs:
+      - merge_requests
+      - master
+      - develop
 
 build:angular:
   stage: build
-    only:
+  only:
+    refs:
     - merge_requests
     - master
     - develop
@@ -56,7 +58,8 @@ pack:create-image:
 publish:latest-image:
   stage: publish
   image: docker:dind
-    only:
+  only:
+    refs:
     - master
   script:
     - docker login -u $docker_user -p $docker_pwd
@@ -68,7 +71,8 @@ deploy:update-service:
   stage: deploy
   image: ubuntu
   only:
-    - master
+    refs:
+      - master
   script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
