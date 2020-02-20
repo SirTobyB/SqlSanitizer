@@ -1,3 +1,6 @@
+variables:
+  DOCKER_DRIVER: overlay2
+
 stages:
   - build
   - pack
@@ -51,7 +54,7 @@ pack:create-image:
     - build:angular
     - build:api
   script:
-    - docker build --rm -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker build -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
     - docker login -u $docker_user -p $docker_pwd
     - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
 
