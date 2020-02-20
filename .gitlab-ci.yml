@@ -30,14 +30,14 @@ build:angular:
     paths:
       - ./ui
 
-pack:final-image:
+pack:create-image:
   stage: pack
   image: docker:dind
   dependencies:
     - build:angular
     - build:api
   script:
-    - docker build --rm jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker build --rm -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
     - docker login -u $docker_user -p $docker_pwd
     - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
 
