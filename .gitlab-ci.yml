@@ -14,9 +14,17 @@ build:api:
   artifacts:
     paths:
       - ./api
+  only:
+    - merge_requests
+    - master
+    - develop
 
 build:angular:
   stage: build
+    only:
+    - merge_requests
+    - master
+    - develop
   image: node:13
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
@@ -48,9 +56,8 @@ pack:create-image:
 publish:latest-image:
   stage: publish
   image: docker:dind
-  only:
-    refs:
-      - master
+    only:
+    - master
   script:
     - docker login -u $docker_user -p $docker_pwd
     - docker pull jhell/sql-sanitizer:$CI_COMMIT_SHA
@@ -61,8 +68,7 @@ deploy:update-service:
   stage: deploy
   image: ubuntu
   only:
-    refs:
-      - master
+    - master
   script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
