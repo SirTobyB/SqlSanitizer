@@ -1,3 +1,6 @@
+variables:
+  DOCKER_DRIVER: overlay2
+
 stages:
   - build
   - pack
@@ -14,9 +17,19 @@ build:api:
   artifacts:
     paths:
       - ./api
+  only:
+    refs:
+      - merge_requests
+      - master
+      - develop
 
 build:angular:
   stage: build
+  only:
+    refs:
+    - merge_requests
+    - master
+    - develop
   image: node:13
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
@@ -33,11 +46,15 @@ build:angular:
 pack:create-image:
   stage: pack
   image: docker:dind
+  only:
+    refs:
+      - master
+      - develop
   dependencies:
     - build:angular
     - build:api
   script:
-    - docker build --rm -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker build -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
     - docker login -u $docker_user -p $docker_pwd
     - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
 
@@ -46,7 +63,7 @@ publish:latest-image:
   image: docker:dind
   only:
     refs:
-      - master
+    - master
   script:
     - docker login -u $docker_user -p $docker_pwd
     - docker pull jhell/sql-sanitizer:$CI_COMMIT_SHA
