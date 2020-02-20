@@ -50,5 +50,21 @@ publish:latest-image:
   script:
     - docker login -u $docker_user -p $docker_pwd
     - docker pull jhell/sql-sanitizer:$CI_COMMIT_SHA
-    - docker jhell/sql-sanitizer:$CI_COMMIT_SHA jhell/sql-sanitizer:latest
+    - docker tag jhell/sql-sanitizer:$CI_COMMIT_SHA jhell/sql-sanitizer:latest
     - docker push jhell/sql-sanitizer:latest
+
+deploy:update-service:
+  stage: deploy
+  image: ubuntu
+  only:
+    refs:
+      - master
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$ssh_key" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$ssh_known_host" > ~/.ssh/known_hosts'
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh $ssh_user@$host 'cd /srv/sql && docker-compose up -d --no-deps --build sanitizer'
