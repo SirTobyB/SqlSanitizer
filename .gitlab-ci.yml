@@ -1,0 +1,54 @@
+stages:
+  - build
+  - pack
+  - publish
+  - deploy
+
+build:api:
+  stage: build
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+  script:
+    - cd SqlSanitizer.Api
+    - dotnet restore
+    - dotnet publish -c Release -o ../api SqlSanitizer.Api.csproj
+  artifacts:
+    paths:
+      - ./api
+
+build:angular:
+  stage: build
+  image: node:13
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - sql-sanitizer/node_modules/
+  script:
+    - cd sql-sanitizer
+    - yarn
+    - node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod --source-map=false --output-path=../ui
+  artifacts:
+    paths:
+      - ./ui
+
+pack:create-image:
+  stage: pack
+  image: docker:dind
+  dependencies:
+    - build:angular
+    - build:api
+  script:
+    - docker build --rm -t jhell/sql-sanitizer:$CI_COMMIT_SHA -f CI.DOCKERFILE .
+    - docker login -u $docker_user -p $docker_pwd
+    - docker push jhell/sql-sanitizer:$CI_COMMIT_SHA
+
+publish:latest-image:
+  stage: publish
+  image: docker:dind
+  only:
+    refs:
+      - master
+  script:
+    - docker login -u $docker_user -p $docker_pwd
+    - docker pull jhell/sql-sanitizer:$CI_COMMIT_SHA
+    - docker jhell/sql-sanitizer:$CI_COMMIT_SHA jhell/sql-sanitizer:latest
+    - docker push jhell/sql-sanitizer:latest
