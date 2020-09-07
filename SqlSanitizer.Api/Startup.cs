@@ -34,7 +34,7 @@ namespace SqlSanitizer.Api
 
             app.UseRouting();
             app.UseCors(options =>
-                options.WithOrigins(new[] {"http://localhost:4200", "https://sql.jhell.dev"}).AllowAnyMethod().AllowAnyHeader());
+                options.WithOrigins(new[] {"http://localhost:4200", "https://sql.jhell.dev", "https://sql.jhell.tech"}).AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
