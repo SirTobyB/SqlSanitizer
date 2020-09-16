@@ -1,0 +1,7 @@
+{
+  "name": "ion-sanitizer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
