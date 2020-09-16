@@ -32,21 +32,11 @@ namespace SqlSanitizer.Api.Controllers
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }
 
-            while (true)
+            foreach (var parameter in request.Parameter.OrderByDescending(p => p.Name.Length).ToList())
             {
-                var match = Regex.Match(formattedSqlQuery, @"\@\b[a-zA-Z0-9]*\b");
-
-                if (!match.Success)
-                    break;
-
-                var parameter = request.Parameter.FirstOrDefault(p => p.Name == match.Value);
-
-                if (parameter == null)
-                    continue;
-
-                formattedSqlQuery = formattedSqlQuery.Remove(match.Index, match.Length).Insert(match.Index, parameter.Value);
+                formattedSqlQuery = formattedSqlQuery.Replace(parameter.Name, parameter.Value);
             }
-
+            
             var payloadData = new Dictionary<string, string>
             {
                 { "reindent", Convert.ToInt32(request.Reindent).ToString() },
