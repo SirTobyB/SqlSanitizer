@@ -6,5 +6,15 @@
 ion-card {
   height: 100%;
   margin: unset;
+}
 
+.editor-card-content {
+  flex-grow: 1;
+}
+
+.editor {
+  height: 100%;
+  .editor-container {
+    height: calc(100vh - 100px);
+  }
 }

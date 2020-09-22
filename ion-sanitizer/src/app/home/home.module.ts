@@ -6,15 +6,17 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import {HttpClientModule} from '@angular/common/http';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    HomePageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        HomePageRoutingModule,
+        MonacoEditorModule
+    ],
   declarations: [HomePage]
 })
 export class HomePageModule {}

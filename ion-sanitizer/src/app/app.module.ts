@@ -10,12 +10,18 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {HomePageRoutingModule} from './home/home-routing.module';
 import {HttpClientModule} from '@angular/common/http';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
-    HttpClientModule],
+  imports: [
+      BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    MonacoEditorModule.forRoot()
+  ],
   providers: [
     StatusBar,
     SplashScreen,

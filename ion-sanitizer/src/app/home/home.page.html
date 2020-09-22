@@ -16,7 +16,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-item lines="inset">
-              <ion-label position="floating">Chars to remove (comma seperated)</ion-label>
+              <ion-label position="floating"  class="ion-text-wrap">Chars to remove (comma seperated)</ion-label>
               <ion-input></ion-input>
             </ion-item>
             <ion-item lines="inset">
@@ -45,17 +45,25 @@
               <ion-label>Strip comments</ion-label>
               <ion-checkbox></ion-checkbox>
             </ion-item>
-            <ion-list>
+              <ion-button expand="block">Sanitize</ion-button>
+            <ion-list *ngIf="parameter.length > 0">
               <ion-list-header>Parameter</ion-list-header>
+              <ion-item *ngFor="let param of parameter">
+                <ion-label position="floating">{{param.name}}</ion-label>
+                <ion-input [(ngModel)]="param.value"></ion-input>
+              </ion-item>
             </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col size="12" size-lg="9">
-        <ion-card>
+        <ion-card style="display: flex; flex-flow: column">
           <ion-card-header>
             <ion-card-title>Query</ion-card-title>
           </ion-card-header>
+          <ion-card-content class="editor-card-content">
+            <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="code" (ngModelChange)="onModelChange()"></ngx-monaco-editor>
+          </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
