@@ -19,7 +19,7 @@ namespace SqlSanitizer.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddControllers().AddNewtonsoftJson();//.AddMetrics();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +34,7 @@ namespace SqlSanitizer.Api
 
             app.UseRouting();
             app.UseCors(options =>
-                options.WithOrigins(new[] {"http://localhost:4200", "https://sql.jhell.dev", "https://sql.jhell.tech"}).AllowAnyMethod().AllowAnyHeader());
+                options.WithOrigins(new[] {"http://localhost:8100", "https://sql.jhell.dev", "https://sql.jhell.tech"}).AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

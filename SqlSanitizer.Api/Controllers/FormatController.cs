@@ -23,11 +23,16 @@ namespace SqlSanitizer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Format([FromBody] FormatRequest request)
         {
+            if (request.IndentWidth <= 0)
+            {
+                request.IndentWidth = 2;
+            }
+            
             request.Parameter = request.Parameter.Where(p => !string.IsNullOrWhiteSpace(p.Value)).ToArray();
             
             var formattedSqlQuery = request.SqlQuery;
 
-            foreach (var charToRemove in request.CharsToRemove)
+            foreach (var charToRemove in request.CharsToRemove.Where(c => !string.IsNullOrWhiteSpace(c)))
             {
                 formattedSqlQuery = formattedSqlQuery.Replace(charToRemove, "");
             }

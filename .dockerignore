@@ -4,5 +4,5 @@ SqlSanitizer.Api/bin
 SqlSanitizer.Api/.idea
 SqlSanitizer.Api/obj
 
-sql-sanitizer/dist
-sql-sanitizer/node_modules
+ion-sanitizer/www
+ion-sanitizer/node_modules

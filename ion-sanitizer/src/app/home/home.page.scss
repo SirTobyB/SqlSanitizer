@@ -1,0 +1,37 @@
+#home-grid {
+  height: 100%;
+  display: flex; flex-flow: column
+}
+
+ion-card {
+  height: 100%;
+  margin: unset;
+}
+
+.editor-card-content {
+  flex-grow: 1;
+}
+
+.editor {
+  height: 100%;
+  .editor-container {
+    height: calc(100vh - 100px);
+  }
+}
+
+.config-card {
+  display: flex;
+  flex-flow: column;
+
+  ion-card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column;
+
+    .param-list-container {
+      flex-grow: 1;
+    }
+  }
+}
+
+

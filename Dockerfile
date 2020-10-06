@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS dotnet-builder
 WORKDIR /app
 
 COPY SqlSanitizer.Api/ ./
@@ -6,23 +6,24 @@ COPY SqlSanitizer.Api/ ./
 RUN dotnet restore
 RUN dotnet publish -c Release -o /out SqlSanitizer.Api.csproj
 
-FROM node:13 as ng-builder
+FROM node:14.11 as ng-builder
 WORKDIR /app
 
+RUN npm install -g @ionic/cli
 
-COPY sql-sanitizer/package.json ./package.json
-COPY sql-sanitizer/yarn.lock ./yarn.lock
+COPY ion-sanitizer/package.json ./package.json
+COPY ion-sanitizer/package-lock.json ./package-lock.json
 
-RUN yarn
+RUN npm ci
 
-COPY sql-sanitizer/ ./
-RUN node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod --source-map=false
+COPY ion-sanitizer/ ./
+RUN ionic build --prod
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 
 COPY --from=dotnet-builder /out .
-COPY --from=ng-builder /app/dist/sql-sanitizer/* ./wwwroot/
+COPY --from=ng-builder /app/www/* ./wwwroot/
 
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "SqlSanitizer.Api.dll"]
