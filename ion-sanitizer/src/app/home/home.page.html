@@ -10,22 +10,22 @@
   <ion-grid id="home-grid">
     <ion-row style="flex-grow: 1;">
       <ion-col size="12" size-lg="3">
-        <ion-card>
+        <ion-card class="config-card">
           <ion-card-header>
             <ion-card-title>Configuration</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-item lines="inset">
               <ion-label position="floating"  class="ion-text-wrap">Chars to remove (comma seperated)</ion-label>
-              <ion-input></ion-input>
+              <ion-input [(ngModel)]="charsToRemove"></ion-input>
             </ion-item>
             <ion-item lines="inset">
               <ion-label position="floating">Indent Width</ion-label>
-              <ion-input inputmode="numeric" min="0" step="1" type="number"></ion-input>
+              <ion-input inputmode="numeric" min="2" step="1" type="number" [(ngModel)]="formatOptions.indentWidth"></ion-input>
             </ion-item>
             <ion-item lines="inset">
               <ion-label>Identifier case</ion-label>
-              <ion-select value="Default" interface="popover">
+              <ion-select value="Default" interface="popover" [(ngModel)]="formatOptions.identifierCase">
                 <ion-select-option value="Default">Default</ion-select-option>
                 <ion-select-option value="Lower">Lower</ion-select-option>
                 <ion-select-option value="Upper">Upper</ion-select-option>
@@ -34,7 +34,7 @@
             </ion-item>
             <ion-item lines="inset">
               <ion-label>Keyword case</ion-label>
-              <ion-select value="Default" interface="popover">
+              <ion-select value="Default" interface="popover" [(ngModel)]="formatOptions.keywordCase">
                 <ion-select-option value="Default">Default</ion-select-option>
                 <ion-select-option value="Lower">Lower</ion-select-option>
                 <ion-select-option value="Upper">Upper</ion-select-option>
@@ -43,16 +43,18 @@
             </ion-item>
             <ion-item lines="inset">
               <ion-label>Strip comments</ion-label>
-              <ion-checkbox></ion-checkbox>
+              <ion-checkbox [(ngModel)]="formatOptions.stripComments"></ion-checkbox>
             </ion-item>
-              <ion-button expand="block">Sanitize</ion-button>
-            <ion-list *ngIf="parameter.length > 0">
-              <ion-list-header>Parameter</ion-list-header>
-              <ion-item *ngFor="let param of parameter">
-                <ion-label position="floating">{{param.name}}</ion-label>
-                <ion-input [(ngModel)]="param.value"></ion-input>
-              </ion-item>
-            </ion-list>
+            <ion-button style="margin-bottom: 1em" expand="block" (click)="formatQuery()">Sanitize</ion-button>
+            <ion-content class="param-list-container">
+              <ion-list>
+                <ion-list-header>Parameter</ion-list-header>
+                <ion-item *ngFor="let param of formatOptions.parameter">
+                  <ion-label position="floating">{{param.name}}</ion-label>
+                  <ion-input [(ngModel)]="param.value"></ion-input>
+                </ion-item>
+              </ion-list>
+            </ion-content>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -62,7 +64,7 @@
             <ion-card-title>Query</ion-card-title>
           </ion-card-header>
           <ion-card-content class="editor-card-content">
-            <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="code" (ngModelChange)="onModelChange()"></ngx-monaco-editor>
+            <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="formatOptions.sqlQuery" (ngModelChange)="onModelChange()"></ngx-monaco-editor>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -74,7 +76,7 @@
             <ion-card-title>Build by</ion-card-title>
           </ion-card-header>
           <ion-card-content style="padding-bottom: 8px;">
-            <a *ngFor="let contributor of contributors$ | async" href="{{contributor.html_url}}">
+            <a *ngFor="let contributor of contributors$ | async" href="{{contributor.html_url}}" target="_blank">
             <ion-chip>
               <ion-avatar>
                 <img src="{{contributor.avatar_url}}">

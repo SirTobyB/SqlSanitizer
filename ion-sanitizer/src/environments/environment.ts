@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   repoName: 'erfgypO/SqlSanitizer',
   contributorsEndpoint: 'https://api.github.com/repos/erfgypO/SqlSanitizer/contributors',
+  apiUrl: 'http://localhost:5000/api/format',
 };
 
 /*
