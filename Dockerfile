@@ -23,7 +23,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 
 COPY --from=dotnet-builder /out .
-COPY --from=ng-builder /app/www/* ./wwwroot/
+COPY --from=ng-builder /app/www ./wwwroot
 
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "SqlSanitizer.Api.dll"]

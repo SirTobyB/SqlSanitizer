@@ -29,14 +29,19 @@ namespace SqlSanitizer.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseCors(options =>
-                options.WithOrigins(new[] {"http://localhost:8100", "https://sql.jhell.dev", "https://sql.jhell.tech"}).AllowAnyMethod().AllowAnyHeader());
+                options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapFallbackToFile("/index.html");
+            });
         }
     }
 }
